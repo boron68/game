@@ -2,7 +2,7 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Primo Клікер</title>
   <style>
     html, body {
@@ -45,6 +45,7 @@
       transform: translate(-50%, -50%) scale(0.95);
     }
 
+    /* Скриню розміщено в лівому нижньому куті */
     #box {
       cursor: pointer;
       width: 100px;
@@ -55,7 +56,7 @@
       transform: translateX(-50%);
     }
 
-    /* Для сцени скрині */
+    /* Сцена скрині */
     #chestScene {
       display: none;
       position: absolute;
@@ -63,7 +64,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: #444444; /* Інший фон для сцени скрині */
+      background-color: #444444; /* Фон для сцени скрині */
       display: flex;
       justify-content: center;
       align-items: center;
@@ -73,6 +74,7 @@
     #reward {
       text-align: center;
       font-size: 1.5em;
+      display: none;
     }
 
     #reward img {
@@ -103,6 +105,7 @@
     </div>
   </div>
 
+  <!-- Підключаємо box.js, де знаходиться логіка отримання нагород -->
   <script src="box.js"></script>
   <script>
     let clicks = 0;
@@ -115,36 +118,32 @@
     const rewardImage = document.getElementById('rewardImage');
     const rewardName = document.getElementById('rewardName');
 
-    // Показуємо основну сцену
+    // Показ основної сцени при завантаженні сторінки
     window.onload = function() {
-      mainScene.style.display = 'flex'; // Показуємо основну сцену при завантаженні
+      mainScene.style.display = 'flex';
     };
 
-    // При натисканні на скриню
+    // Натискання на скриню: перехід до сцени скрині та отримання нагороди з box.js
     box.addEventListener('click', function() {
-      // Перехід до сцени скрині
-      mainScene.style.display = 'none'; // Сховати основну сцену
-      chestScene.style.display = 'flex'; // Показати сцену скрині
+      mainScene.style.display = 'none';      // Ховаємо основну сцену
+      chestScene.style.display = 'flex';       // Показуємо сцену скрині
 
-      // Отримуємо випадковий предмет з функції з box.js
+      // Виклик функції з box.js для отримання випадкового предмета
       const randomItem = getRandomStarrDrop();
-
-      // Виводимо інформацію про предмет
       rewardImage.src = randomItem.imagePath;
       rewardName.textContent = randomItem.displayName;
 
-      // Показуємо інформацію про предмет
       rewardSection.style.display = 'block';
     });
 
-    // Повернення на основну сцену при натисканні на сцену скрині
+    // Натискання на сцену скрині: повернення до основної сцени
     chestScene.addEventListener('click', function() {
-      chestScene.style.display = 'none'; // Сховати сцену скрині
-      rewardSection.style.display = 'none'; // Сховати нагороду
-      mainScene.style.display = 'flex'; // Показати основну сцену
+      chestScene.style.display = 'none';
+      rewardSection.style.display = 'none';
+      mainScene.style.display = 'flex';
     });
 
-    // Клік по центральному зображенню для збільшення кліків
+    // Натискання на центральне зображення збільшує лічильник кліків
     clicker.addEventListener('click', () => {
       clicks++;
       counter.textContent = `Кліки: ${clicks}`;
