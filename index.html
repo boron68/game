@@ -2,17 +2,21 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Primo Клікер</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
       overflow: hidden;
-      background-color: #87CEEB;
+      background-color: #87CEEB; /* Фон для основної сцени */
       width: 100vw;
       height: 100vh;
       font-family: sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
     }
 
     #counter {
@@ -38,73 +42,114 @@
     }
 
     #clicker:active {
-      transform: translate(-50%, -50%) scale(0.95); /* Зменшення картинки при натисканні */
+      transform: translate(-50%, -50%) scale(0.95);
     }
 
     #box {
-      position: absolute;
-      bottom: 20px; /* Відступ від нижнього краю */
-      left: 20px;  /* Відступ від лівого краю */
-      width: 100px;  /* Встановлюємо бажану ширину */
-      height: auto;  /* Автоматична висота в залежності від ширини */
       cursor: pointer;
+      width: 100px;
+      height: auto;
+      position: absolute;
+      bottom: 20px;
+      left: 10%;
+      transform: translateX(-50%);
     }
 
-    /* Сцена скрині */
+    /* Для сцени скрині */
     #chestScene {
+      display: none;
       position: absolute;
-      width: 100vw;
-      height: 100vh;
-      background-color: #FFD700;
-      display: none;  /* Сцена буде прихована за замовчуванням */
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #444444; /* Інший фон для сцени скрині */
+      display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 5;
+      color: white;
     }
 
-    #chestBox {
-      width: 150px;
+    #reward {
+      text-align: center;
+      font-size: 1.5em;
+    }
+
+    #reward img {
+      width: 100px;
       height: auto;
-      cursor: pointer;
+    }
+
+    #rewardName {
+      font-size: 1.2em;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
+
   <!-- Основна сцена -->
-  <div id="counter">Кліки: 0</div>
-  <img id="clicker" src="img/primo_elrudo_pin.png" alt="El Primo">
-  <img id="box" src="img/box.png" alt="Box">
+  <div id="mainScene">
+    <div id="counter">Кліки: 0</div>
+    <img id="clicker" src="img/primo_elrudo_pin.png" alt="El Primo">
+    <img id="box" src="img/box.png" alt="Скриня">
+  </div>
 
   <!-- Сцена скрині -->
   <div id="chestScene">
-    <img id="chestBox" src="img/box.png" alt="Box">
+    <div id="reward">
+      <img id="rewardImage" src="" alt="Нагорода">
+      <div id="rewardName"></div>
+    </div>
   </div>
 
+  <script src="box.js"></script>
   <script>
     let clicks = 0;
     const counter = document.getElementById('counter');
     const clicker = document.getElementById('clicker');
     const box = document.getElementById('box');
+    const mainScene = document.getElementById('mainScene');
     const chestScene = document.getElementById('chestScene');
-    const chestBox = document.getElementById('chestBox');
+    const rewardSection = document.getElementById('reward');
+    const rewardImage = document.getElementById('rewardImage');
+    const rewardName = document.getElementById('rewardName');
 
-    // При натисканні на картинку El Primo
+    // Показуємо основну сцену
+    window.onload = function() {
+      mainScene.style.display = 'flex'; // Показуємо основну сцену при завантаженні
+    };
+
+    // При натисканні на скриню
+    box.addEventListener('click', function() {
+      // Перехід до сцени скрині
+      mainScene.style.display = 'none'; // Сховати основну сцену
+      chestScene.style.display = 'flex'; // Показати сцену скрині
+
+      // Отримуємо випадковий предмет з функції з box.js
+      const randomItem = getRandomStarrDrop();
+
+      // Виводимо інформацію про предмет
+      rewardImage.src = randomItem.imagePath;
+      rewardName.textContent = randomItem.displayName;
+
+      // Показуємо інформацію про предмет
+      rewardSection.style.display = 'block';
+    });
+
+    // Повернення на основну сцену при натисканні на сцену скрині
+    chestScene.addEventListener('click', function() {
+      chestScene.style.display = 'none'; // Сховати сцену скрині
+      rewardSection.style.display = 'none'; // Сховати нагороду
+      mainScene.style.display = 'flex'; // Показати основну сцену
+    });
+
+    // Клік по центральному зображенню для збільшення кліків
     clicker.addEventListener('click', () => {
       clicks++;
       counter.textContent = `Кліки: ${clicks}`;
     });
-
-    // Перехід на сцену скрині при натисканні на box.png
-    box.addEventListener('click', () => {
-      document.body.style.backgroundColor = '#FFD700'; // Зміна фону
-      chestScene.style.display = 'flex'; // Показати сцену скрині
-    });
-
-    // При натисканні на box.png на сцені скрині повертаємось на основну сцену
-    chestBox.addEventListener('click', () => {
-      chestScene.style.display = 'none'; // Сховати сцену скрині
-      document.body.style.backgroundColor = '#87CEEB'; // Повертаємо основний фон
-    });
   </script>
+
 </body>
 </html>
