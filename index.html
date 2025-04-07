@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <title>Primo Клікер</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #87CEEB;
+      width: 100vw;
+      height: 100vh;
+      font-family: sans-serif;
+    }
+
+    #counter {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 2em;
+      color: white;
+      text-shadow: 2px 2px #000;
+      z-index: 10;
+    }
+
+    #clicker {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 200px;
+      height: auto;
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+
+    #clicker:active {
+      transform: translate(-50%, -50%) scale(0.95); /* Зменшення картинки при натисканні */
+    }
+
+    #box {
+      position: absolute;
+      bottom: 20px; /* Відступ від нижнього краю */
+      left: 20px;  /* Відступ від лівого краю */
+      width: 100px;  /* Встановлюємо бажану ширину */
+      height: auto;  /* Автоматична висота в залежності від ширини */
+      cursor: pointer;
+    }
+
+    /* Сцена скрині */
+    #chestScene {
+      position: absolute;
+      width: 100vw;
+      height: 100vh;
+      background-color: #FFD700;
+      display: none;  /* Сцена буде прихована за замовчуванням */
+      justify-content: center;
+      align-items: center;
+      z-index: 5;
+    }
+
+    #chestBox {
+      width: 150px;
+      height: auto;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <!-- Основна сцена -->
+  <div id="counter">Кліки: 0</div>
+  <img id="clicker" src="img/primo_elrudo_pin.png" alt="El Primo">
+  <img id="box" src="img/box.png" alt="Box">
+
+  <!-- Сцена скрині -->
+  <div id="chestScene">
+    <img id="chestBox" src="img/box.png" alt="Box">
+  </div>
+
+  <script>
+    let clicks = 0;
+    const counter = document.getElementById('counter');
+    const clicker = document.getElementById('clicker');
+    const box = document.getElementById('box');
+    const chestScene = document.getElementById('chestScene');
+    const chestBox = document.getElementById('chestBox');
+
+    // При натисканні на картинку El Primo
+    clicker.addEventListener('click', () => {
+      clicks++;
+      counter.textContent = `Кліки: ${clicks}`;
+    });
+
+    // Перехід на сцену скрині при натисканні на box.png
+    box.addEventListener('click', () => {
+      document.body.style.backgroundColor = '#FFD700'; // Зміна фону
+      chestScene.style.display = 'flex'; // Показати сцену скрині
+    });
+
+    // При натисканні на box.png на сцені скрині повертаємось на основну сцену
+    chestBox.addEventListener('click', () => {
+      chestScene.style.display = 'none'; // Сховати сцену скрині
+      document.body.style.backgroundColor = '#87CEEB'; // Повертаємо основний фон
+    });
+  </script>
+</body>
+</html>

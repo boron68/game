@@ -1,0 +1,7 @@
+gold_coin.png-camon
+gems_icon.png-camon
+emoji_penny_bunny.png-rare
+classic_box_mega_pin.png-epik
+el_primo_hypercharge_pin.png-hypercharge
+gale_hypercharge_pin.png-hypercharge
+bibi_hypercharge_pin.png-hypercharge
